@@ -17,12 +17,6 @@ ClientSide::ClientSide(QWidget *parent) :
 void ClientSide::createSocket(){
     newSocket=new socket();
     newSocket->createSocket();
-    if (newSocket->isConnected()){
-        ui->label_2->setText("Sending Random Image");
-    }
-    else {
-        ui->label_2->setText("Connection refused");
-    }
 
 }
 
@@ -30,3 +24,6 @@ ClientSide::~ClientSide()
 {
     delete ui;
 }
+
+
+

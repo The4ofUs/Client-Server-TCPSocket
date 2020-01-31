@@ -30,7 +30,7 @@ serverSide::~serverSide()
 }
 void serverSide::newConnection(){
     int Descriptor=server->sendDescriptor();
-    ui->listWidget->addItem("The connected descriptor is"+ QString::number(Descriptor));
+    ui->listWidget->addItem( "Descriptor is"+ QString::number(Descriptor));
 }
 
 void serverSide::displayImage()
