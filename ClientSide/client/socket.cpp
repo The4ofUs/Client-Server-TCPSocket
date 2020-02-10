@@ -7,6 +7,8 @@
 #include <QImageWriter>
 #include <QTime>
 #include <QDir>
+#include <iostream>   // std::cout
+#include <string>
 socket::socket(QObject *parent) : QObject(parent)
 {
 
@@ -36,12 +38,50 @@ void socket::createSocket()
 void socket::connected()
 {
     qDebug() <<"Connected!";
-    sendData();
+    //sendData();
+    sendArray();
     state=true;
 }
 bool socket::isConnected(){
     return state;
 }
+
+void socket::sendArray(){
+    //Creating a Buffer to hold my data
+    //creating a Buffer to hold my array
+    QByteArray array;
+    QBuffer buffer(&array);
+    buffer.open(QIODevice::WriteOnly);
+    qint32 x=17.36;
+
+    //y=x;
+    // buffer.write((char *)&x,sizeof(qint32));
+    // array.append((char *)&x,sizeof(qint32));
+    //array.append((char *)&y,sizeof(double));
+    //array.append((char *)&y,sizeof(double));
+    array.append("50.45");
+    qDebug()<<"Buffer bytes "<<buffer.bytesAvailable();
+    std::string temp=array.toStdString();
+    float y=std::stof(temp);
+    qDebug()<<"y"<<y;
+    qDebug()<<"array size"<< array.size();
+    qDebug()<<"array at"<<array.at(0);
+
+    qDebug()<<"buffer size"<<buffer.size();
+    buffer.close();
+
+    QByteArray data;
+    QDataStream stream( &data, QIODevice::WriteOnly );
+    stream.setVersion( QDataStream::Qt_4_0 );
+    stream << (quint32)buffer.data().size();
+    data.append( buffer.data() );
+    newSocket->write( data );
+    qDebug() <<"data;;"<< data;
+    newSocket->disconnectFromHost();
+    newSocket->waitForDisconnected();
+
+}
+
 
 void socket::sendData(){
     //new Buffer to carry the image to the
@@ -53,6 +93,7 @@ void socket::sendData(){
     QDataStream stream( &data, QIODevice::WriteOnly );
     stream.setVersion( QDataStream::Qt_4_0 );
     stream << (quint32)buffer.data().size();
+    qDebug()<<(quint32)buffer.data().size();
     data.append( buffer.data() );
 
     newSocket->write( data );

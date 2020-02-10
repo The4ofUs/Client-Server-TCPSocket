@@ -25,6 +25,7 @@ public slots:
     void readyRead(); // from QIOObject
     void disconnected();
     void readData();
+    void readArray();
 
 
 private:

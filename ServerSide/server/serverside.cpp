@@ -37,11 +37,10 @@ void serverSide::displayImage()
 {
     //Function imagesending returs the Image that was sent by the Client
     QImage image=server->imagesending();
-    qDebug("The Image is Received by the server, Ready to be displayed on the UI");
+   // qDebug("The Image is Received by the server, Ready to be displayed on the UI");
     //qDebug ()<< image;
     ui->label_2->setPixmap(QPixmap::fromImage(image));
     ui->label_2-> setScaledContents(true);
 
 }
-
 

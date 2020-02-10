@@ -27,6 +27,8 @@ private slots:
     void on_pushButton_clicked();
     void displayImage();
     void newConnection();
+    void on_listenButton_clicked();
+
 private:
     Ui::serverSide *ui;
 

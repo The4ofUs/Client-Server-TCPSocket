@@ -18,6 +18,7 @@ public:
     void sendData();
     void readData();
     bool isConnected();
+    void sendArray();
 signals:
     void sendImage();
 
@@ -36,6 +37,7 @@ private:
     QTcpSocket *newSocket;
     int dataSize;
     bool state;
+    int num[5]={1,2,3,4,5};
 };
 
 #endif // SOCKET_H

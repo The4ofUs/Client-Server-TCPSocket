@@ -36,7 +36,7 @@ void initiateServer::incomingConnection(qintptr socketDescriptor)
     /*As long as  the thread is Running the emitSignal will be emitted to notify the UI,
      that there is an upcoming Data need to be displayed*/
     while (thread->isRunning()){
-        qDebug("Thread is Running");
+        //qDebug("Thread is Running");
         imagee=thread->sendImage();
         emitSinal();
     }
