@@ -3,6 +3,8 @@
 #include <QDir>
 #include <QtWidgets>
 #include "serverside.h"
+#include<QVector>
+
 threads::threads(int ID, QObject *parent):
     QThread(parent)
 {  //the Descriptor is an index of that socket in an array of sockets from the underlying OS (more or less).
@@ -25,7 +27,7 @@ void  threads::run()
         emit error(socket->error());
         return;
     }
-   // connect(socket, SIGNAL(readyRead()),this, SLOT(readData()),Qt::DirectConnection);
+    // connect(socket, SIGNAL(readyRead()),this, SLOT(readData()),Qt::DirectConnection);
     connect(socket, SIGNAL(readyRead()),this, SLOT(readArray()),Qt::DirectConnection);
     connect(socket, SIGNAL(disconnected()),this, SLOT(disconnected()),Qt::DirectConnection);
     qDebug() << socketDescriptor << " Client Connected!";
@@ -66,22 +68,29 @@ void threads::readArray(){
     QByteArray array = socket->read( dataSize );
     qDebug("I am reading");
     qDebug()<<array.size();
+    QString finalOutput;
+    QVector<QVector<float>>V;
+    for(int i=1;i<=array.size();i++){
+        QString DataAsString = QString(array.at(i-1));
+        qDebug()<<DataAsString;
+        finalOutput.append(DataAsString);
+        if((i)%7==0){
+            float y=finalOutput.toFloat();
+            QVector<float> v;
+            v.push_back(y);
+            finalOutput.clear();
+            V.push_back(v);
+            qDebug()<<"vector"<<V;
+            qDebug()<<V.size();
+        }
+    }
 
-    float x;
-    x=array.toFloat();
-    qDebug("x");
-    qDebug()<<x;
-    float y=array.at(1);
-    qDebug()<<y;
-/*
-    for(int i=0; i<=array.size();i++){
-        y=(float)array.at(i);
-        qDebug()<<x;
 
-    }*/
+
+
     //P.S. to construct a vector of vectors, we create a small vector then push the results to the 2D vector
 
-   // vector<vector<int>> v;
+    // vector<vector<int>> v;
 
     //QBuffer buffer(&array);
     //buffer.open( QIODevice::ReadOnly );

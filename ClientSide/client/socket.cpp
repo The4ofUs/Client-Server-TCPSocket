@@ -48,31 +48,32 @@ bool socket::isConnected(){
 
 void socket::sendArray(){
     //Creating a Buffer to hold my data
-    //creating a Buffer to hold my array
     QByteArray array;
     QBuffer buffer(&array);
     buffer.open(QIODevice::WriteOnly);
-    qint32 x=17.36;
-
-    //y=x;
-    // buffer.write((char *)&x,sizeof(qint32));
-    // array.append((char *)&x,sizeof(qint32));
-    //array.append((char *)&y,sizeof(double));
-    //array.append((char *)&y,sizeof(double));
-    array.append("50.45");
+   //Encoding goes as follows
+   //Converting my numbers to QString as append can handle QString and Char only
+   //then append the results to QBytearray,Hint:: BinaryData
+    float x=17.1689;
+    for(int i=0;i<20;i++){
+    x=x+i;
+    QString tempp=QString::number(x);
+    array.append(tempp);}
     qDebug()<<"Buffer bytes "<<buffer.bytesAvailable();
-    std::string temp=array.toStdString();
+    //Checking the values
+    /*std::string temp=array.toStdString();
     float y=std::stof(temp);
-    qDebug()<<"y"<<y;
-    qDebug()<<"array size"<< array.size();
-    qDebug()<<"array at"<<array.at(0);
+    qDebug()<<"y"<<y;*/
 
+
+    qDebug()<<"array size"<< array.size();
     qDebug()<<"buffer size"<<buffer.size();
     buffer.close();
-
+    //Loading the results to a stream
     QByteArray data;
     QDataStream stream( &data, QIODevice::WriteOnly );
     stream.setVersion( QDataStream::Qt_4_0 );
+    //Telling the receiver how much of a data is coming
     stream << (quint32)buffer.data().size();
     data.append( buffer.data() );
     newSocket->write( data );
